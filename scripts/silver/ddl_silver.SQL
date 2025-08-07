@@ -10,7 +10,7 @@ Script Purpose:
 */
 Use DataWarehouse;
 
-if object_id ('silver.crm_cust_infor', 'U') is not null
+IF object_id ('silver.crm_cust_infor', 'U') is not null
 	drop table silver.crm_cust_infor;
 
 Create Table silver.crm_cust_infor (
