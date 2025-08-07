@@ -55,7 +55,7 @@ if object_id ('bronze.erp_cust_az12', 'U') is not null
 	drop table bronze.erp_cust_az12;
 
 Create Table bronze.erp_cust_az12 (
-	CID	nvarchar(50),
+	CID nvarchar(50),
 	BDATE date,
 	GEN nvarchar(50)
 );
@@ -73,7 +73,7 @@ if object_id ('bronze.erp_px_cat_g1v2', 'U') is not null
 
 Create table bronze.erp_px_cat_g1v2 (
 	ID nvarchar(50),	
-	CAT	nvarchar(50),
+	CAT nvarchar(50),
 	SUBCAT nvarchar(50),
 	MAINTENANCE nvarchar(50)
 );
