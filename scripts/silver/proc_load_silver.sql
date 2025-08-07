@@ -164,3 +164,30 @@ Create or alter procedure silver.load_silver AS
 					Set @end_time = GETDATE();
 					print '>> Load Duration: ' +Cast (Datediff(second, @start_time, @end_time) As Nvarchar) + 'seconds';
 					print'>> --------------';
+			
+	-- Loading erp_cust_az12
+
+					Set @start_time = GETDATE();
+					print '>> Truncating Table: silver.erp_cust_az12';
+					Truncate table silver.erp_cust_az12;
+					
+					print '>> Insert Data Into: silver.erp_cust_az12';
+					
+					Insert into silver.erp_cust_az12 ( cid, BDATE, Gen)
+					Select
+						cid,
+						case when cid like 'NAS%' then substring(CID,4, len(cid))
+						else cid
+						end as cid,	
+						case when BDATE > Getdate() then Null
+						else BDATE
+						END AS BDATE,
+						case when upper(trim(Gen)) In ('F','Female') then 'Female'
+						     when upper(trim(Gen)) In ('M','Male')  then 'Male'
+							 else 'N/A'
+						end as Gen
+					from bronze.erp_cust_az12;  
+
+					Set @end_time = GETDATE();
+					print '>> Load Duration: ' +Cast (Datediff(second, @start_time, @end_time) As Nvarchar) + 'seconds';
+					print'>> --------------';
