@@ -43,7 +43,7 @@ Create Table bronze.crm_sales_details (
 	sls_ord_num	Nvarchar(50),
 	sls_prd_key	NVarchar(50),
 	sls_cust_id	int,
-	sls_order_dt int,
+	sls_order_dt    int,
 	sls_ship_dt	int,
 	sls_due_dt	int,
 	sls_sales	int,
