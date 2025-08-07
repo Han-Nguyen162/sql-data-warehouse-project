@@ -72,4 +72,43 @@ Create or alter procedure silver.load_silver AS
               
 
                   -- Loading silver.crm_cprd_infor
-          		
+					Set @end_time = GETDATE();
+					print '>> Load Duration: ' +Cast (Datediff(second, @start_time, @end_time) As Nvarchar) + 'seconds';
+					print'>> --------------';
+					
+					Set @start_time = GETDATE();
+					print '>> Truncating Table: silver.crm_prd_infor';
+					Truncate table silver.crm_prd_infor;
+					
+					print '>> Insert Data Into: silver.crm_prd_infor';
+					
+							Insert into silver.crm_prd_infor (
+								prd_id,
+								cat_id,
+								prd_key,
+								prd_nm,
+								prd_cost,
+								prd_line,
+								prd_start_dt,
+								prd_end_dt
+									)
+							Select 
+								prd_id,
+								Replace(Substring(prd_key,1,5), '-','_') as cat_id,
+								substring(prd_key,7, len(prd_key)) as prd_key,
+								prd_nm,
+								Isnull(prd_cost,0) as prd_cost,
+								case
+									when Upper(trim(prd_line)) = 'M' then 'Mountain'
+									when Upper(trim(prd_line)) = 'R' then 'Road'
+									when Upper(trim(prd_line)) = 'S' then 'Other Sales'
+									when Upper(trim(prd_line)) = 'T' then 'Touring'
+									else 'N/A'
+								end as prd_line,
+								cast (prd_start_dt As Date) as prd_start_dt, 
+								dateadd(day,-1, Lead(prd_start_dt) over (partition by prd_key order by prd_start_dt)) AS prd_end_dt
+							from bronze.crm_prd_infor;
+					
+					Set @end_time = GETDATE();
+					print '>> Load Duration: ' +Cast (Datediff(second, @start_time, @end_time) As Nvarchar) + 'seconds';
+					print'>> --------------';
