@@ -10,8 +10,9 @@ Script Purpose:
 */
 Use DataWarehouse;
 
-IF object_id ('silver.crm_cust_infor', 'U') is not null
+if object_id ('silver.crm_cust_infor', 'U') is not null
 	drop table silver.crm_cust_infor;
+Go
 
 Create Table silver.crm_cust_infor (
 	cst_id	INT,
@@ -23,6 +24,7 @@ Create Table silver.crm_cust_infor (
 	cst_create_date date,
 	dwh_create_date DATETIME2 DEFAULT GETDATE()
 );
+Go
 
 if object_id ('silver.crm_prd_infor', 'U') is not null
 	drop table silver.crm_prd_infor;
@@ -37,6 +39,7 @@ Create Table silver.crm_prd_infor (
 	prd_end_dt Date,
 	dwh_create_date DATETIME2 DEFAULT GETDATE()
 );
+Go
 
 if object_id ('silver.crm_sales_details', 'U') is not null
 	drop table silver.crm_sales_details;
@@ -53,6 +56,7 @@ Create Table silver.crm_sales_details (
 	sls_price Int,
 	dwh_create_date DATETIME2 DEFAULT GETDATE()
 );
+Go
 
 if object_id ('silver.erp_cust_az12', 'U') is not null
 	drop table silver.erp_cust_az12;
@@ -63,6 +67,7 @@ Create Table silver.erp_cust_az12 (
 	GEN nvarchar(50),
 	dwh_create_date DATETIME2 DEFAULT GETDATE()
 );
+Go
 
 if object_id ('silver.erp_loc_a101', 'U') is not null
 	drop table silver.erp_loc_a101;
@@ -72,6 +77,7 @@ Create table silver.erp_loc_a101 (
 	CNTRY nvarchar(50),
 	dwh_create_date DATETIME2 DEFAULT GETDATE()
 );
+Go
 
 if object_id ('silver.erp_px_cat_g1v2', 'U') is not null
 	drop table silver.erp_px_cat_g1v2;
@@ -83,3 +89,4 @@ Create table silver.erp_px_cat_g1v2 (
 	MAINTENANCE nvarchar(50),
 	dwh_create_date DATETIME2 DEFAULT GETDATE()
 );
+Go
