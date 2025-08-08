@@ -191,3 +191,61 @@ Create or alter procedure silver.load_silver AS
 					Set @end_time = GETDATE();
 					print '>> Load Duration: ' +Cast (Datediff(second, @start_time, @end_time) As Nvarchar) + 'seconds';
 					print'>> --------------';
+				
+
+	-- Loading erp_loc_a101
+					Set @start_time = GETDATE();
+					print '>> Truncating Table: silver.erp_loc_a101';
+					Truncate table silver.erp_loc_a101;
+					print '>> Insert Data Into: silver.erp_loc_a101';
+					
+					Insert into silver.erp_loc_a101 (CID, CNTRY)
+						select 
+						replace(CID, '-','') as CID,
+						case when upper(trim(CNTRY)) in ('USA','United States','US') then 'United States'
+							 when upper(trim(CNTRY)) = 'DE' then 'Germany'
+							 when upper(trim(CNTRY))= '' or CNTRY is null then 'N/A'
+							 else (trim(CNTRY))
+						end as CNTRY
+					from bronze.erp_loc_a101
+						
+					Set @end_time = GETDATE();
+					print '>> Load Duration: ' +Cast (Datediff(second, @start_time, @end_time) As Nvarchar) + 'seconds';
+					print'>> --------------';
+
+	-- Loading erp_px_cat_g1v2
+
+					Set @start_time = GETDATE();
+					print '>> Truncating Table: silver.erp_px_cat_g1v2';
+					Truncate table silver.erp_px_cat_g1v2;
+					
+					print '>> Insert Data Into: silver.erp_px_cat_g1v2';
+					
+					Insert into silver.erp_px_cat_g1v2 (id, cat, subcat, maintenance)
+					Select 
+					id,
+					cat,
+					subcat,
+					maintenance from bronze.erp_px_cat_g1v2
+					
+					Set @end_time = GETDATE();
+					print '>> Load Duration: ' +Cast (Datediff(second, @start_time, @end_time) As Nvarchar) + 'seconds';
+					print'>> --------------';
+
+	
+		Set @batch_end_time = GETDATE();
+		print '=================================='
+		print 'Loading silver Layer is completed';
+		print '>> Total Load Duration: ' +Cast (Datediff(second, @batch_start_time, @batch_end_time) As Nvarchar) + 'seconds';
+		print '=================================='
+	
+		end try
+		begin catch
+			print '=================================='
+			print 'Error occured during loading silver layer'
+			print 'Error Message' + Error_Message();
+			print 'Error Message' + Cast (Error_Number() AS NVARCHAR);
+			print 'Error Message' + Cast (Error_Number() AS NVARCHAR);
+			print '=================================='
+		end catch 
+	END;
